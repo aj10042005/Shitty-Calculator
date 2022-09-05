@@ -36,20 +36,18 @@ public abstract class Calculator {
         }
     }
 
-    private static int checkForMinus(char[] in, int i, int len, StringBuffer exp) {
-        boolean minusNeeded=true, isNegativeNumber=true;
-        for(int j = i; j >= 0; j-=1) {
-            if(Character.isDigit(in[i])) {
-                isNegativeNumber = false;
+    private static int checkForMinus(char[] in, int i, int len, StringBuffer exp, StringBuffer aftermath) {
+        boolean minusNeeded=true;
+        for(int j = i-1; j >= 0; j-=1) {
+            if(Character.isDigit(in[j])) {
+                aftermath.append("+");
                 break;
-            } else if(in[i]!='\u0020') {
-                break;
-            }
+            } else if(in[j]!='\u0020') break;
+            
         }
         for(i+=1;i < len;i+=1) {
             if(Character.isDigit(in[i])) {
                 if(minusNeeded) exp.append("-");
-                if(!isNegativeNumber) exp.append("+");
                 return i-1;
             }
 
@@ -102,7 +100,7 @@ public abstract class Calculator {
                 switch(in[i]) {//test lines
 
                     case '-':
-                        i = checkForMinus(in, i, iter, exp);
+                        i = checkForMinus(in, i, iter, exp, aftermath);
                         break;
                     case '+':
                         aftermath.append('+');
