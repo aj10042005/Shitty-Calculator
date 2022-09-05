@@ -37,10 +37,19 @@ public abstract class Calculator {
     }
 
     private static int checkForMinus(char[] in, int i, int len, StringBuffer exp) {
-        boolean minusNeeded=true;
+        boolean minusNeeded=true, isNegativeNumber=true;
+        for(int j = i; j >= 0; j-=1) {
+            if(Character.isDigit(in[i])) {
+                isNegativeNumber = false;
+                break;
+            } else if(in[i]!='\u0020') {
+                break;
+            }
+        }
         for(i+=1;i < len;i+=1) {
             if(Character.isDigit(in[i])) {
                 if(minusNeeded) exp.append("-");
+                if(!isNegativeNumber) exp.append("+");
                 return i-1;
             }
 
