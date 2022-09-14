@@ -72,7 +72,6 @@ public abstract class Calculator {
 
 
         for(; j >= 0; j-=1) {
-            System.out.println(in[j]);
             if(in[j]=='-') {
                 isNegative=true;
                 break;
