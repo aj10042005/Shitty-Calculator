@@ -1,5 +1,6 @@
-package Calculator;
+package discoBot.Model;
 
+import java.util.Arrays;
 import java.util.EmptyStackException;
 import java.util.Stack;
 
@@ -37,13 +38,14 @@ public abstract class Calculator {
     }
 
     private static int checkForMinus(char[] in, int i, int len, StringBuffer exp, StringBuffer aftermath) {
+        Character[] ignore = {'\u0020', ')'};
         boolean minusNeeded=true;
         for(int j = i-1; j >= 0; j-=1) {
             if(Character.isDigit(in[j])) {
                 aftermath.append("+");
                 break;
             } else if(in[j]!='\u0020') break;
-            
+
         }
         for(i+=1;i < len;i+=1) {
             if(Character.isDigit(in[i])) {
@@ -51,7 +53,7 @@ public abstract class Calculator {
                 return i-1;
             }
 
-            else if(in[i] == '\u0020');
+            else if(Arrays.asList(ignore).contains(in[i]));
 
             else if(in[i] == '-') minusNeeded=!minusNeeded;
 
@@ -65,8 +67,19 @@ public abstract class Calculator {
 
     private static int onBracketMet(char[] in, int start, StringBuffer exp) {
         int iter = in.length;
-        int bracks = 0, j = start;
-        for(; j < iter; j++) {
+        int bracks = 0, j = start-1;
+        boolean isNegative = false;
+
+
+        for(; j >= 0; j-=1) {
+            System.out.println(in[j]);
+            if(in[j]=='-') {
+                isNegative=true;
+                break;
+            } else if(in[j]!='\u0020') break;
+        }
+
+        for(j = start; j < iter; j++) {
             if(in[j]=='(')bracks+=1;
             else if(in[j]==')') {
                 bracks-=1;
@@ -76,6 +89,7 @@ public abstract class Calculator {
         }
         if(bracks>0)System.err.println("Expression has missing closing brackets: " + bracks);
         exp.append(toReversePolishNotation(String.valueOf(in).substring(start+1, j).toCharArray()));
+        if(isNegative) exp.append(" -1 * ");
         return j;
     }
 
@@ -83,8 +97,6 @@ public abstract class Calculator {
         StringBuffer exp = new StringBuffer(), aftermath = new StringBuffer();
         int iter = in.length;
         char mulDiv = '='; boolean isMul=false;
-
-
 
         for (int i = 0; i < iter; i++) {
             if(Character.isDigit(in[i])||in[i]=='.') exp.append(in[i]);
