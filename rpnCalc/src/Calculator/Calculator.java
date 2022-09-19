@@ -96,6 +96,7 @@ public abstract class Calculator {
         StringBuffer exp = new StringBuffer(), aftermath = new StringBuffer();
         int iter = in.length;
         char mulDiv = '='; boolean isMul=false;
+        Character[] ignore = {'-', '('};
 
         for (int i = 0; i < iter; i++) {
             if(Character.isDigit(in[i])||in[i]=='.') exp.append(in[i]);
@@ -103,7 +104,7 @@ public abstract class Calculator {
             else {
                 exp.append('\u0020');
 
-                if(isMul && in[i]!='(') {
+                if(isMul && !Arrays.asList(ignore).contains(in[i]) ) {
                     exp.append(mulDiv).append('\u0020');
                     isMul = false;
                 }
